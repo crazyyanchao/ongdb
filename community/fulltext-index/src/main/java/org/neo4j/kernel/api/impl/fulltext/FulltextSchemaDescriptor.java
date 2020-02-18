@@ -25,6 +25,7 @@ import org.neo4j.internal.kernel.api.TokenNameLookup;
 import org.neo4j.internal.kernel.api.schema.SchemaComputer;
 import org.neo4j.internal.kernel.api.schema.SchemaDescriptor;
 import org.neo4j.internal.kernel.api.schema.SchemaProcessor;
+import org.neo4j.kernel.api.schema.MultiTokenSchemaDescriptor;
 import org.neo4j.storageengine.api.EntityType;
 import org.neo4j.storageengine.api.lock.ResourceType;
 
@@ -70,6 +71,12 @@ class FulltextSchemaDescriptor implements SchemaDescriptor
     }
 
     @Override
+    public int[] getPropertyIdsNoSorts()
+    {
+        return schema.getPropertyIdsNoSorts();
+    }
+
+    @Override
     public int getPropertyId()
     {
         return schema.getPropertyId();
@@ -109,6 +116,27 @@ class FulltextSchemaDescriptor implements SchemaDescriptor
     public SchemaDescriptor schema()
     {
         return this;
+    }
+
+    public int[] getSortIds()
+    {
+        return schema.getSortIds();
+    }
+
+    public String getSortType( String sortName )
+    {
+        if ( schema instanceof MultiTokenSchemaDescriptor )
+        {
+            if ( ((MultiTokenSchemaDescriptor) schema).getSortTypes().containsKey( sortName ) )
+            {
+                return ((MultiTokenSchemaDescriptor) schema).getSortTypes().get( sortName );
+            }
+            return "";
+        }
+        else
+        {
+            return "";
+        }
     }
 
     @Override
