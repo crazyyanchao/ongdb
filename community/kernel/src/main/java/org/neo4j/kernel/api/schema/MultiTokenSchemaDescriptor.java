@@ -97,7 +97,7 @@ public class MultiTokenSchemaDescriptor implements SchemaDescriptor
     public String userDescription( TokenNameLookup tokenNameLookup )
     {
         return String.format( entityType + ":%s(%s)", String.join( ", ", tokenNameLookup.entityTokensGetNames( entityType, entityTokens ) ),
-                              SchemaUtil.niceProperties( tokenNameLookup, propertyIds ) );
+                SchemaUtil.niceProperties( tokenNameLookup, propertyIds ) );
     }
 
     // Returns both propertyIds and sortIds

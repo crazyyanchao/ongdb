@@ -45,7 +45,7 @@ public class FulltextIndexAccessor extends AbstractLuceneIndexAccessor<FulltextI
     private final Runnable onClose;
 
     public FulltextIndexAccessor( IndexUpdateSink indexUpdateSink, DatabaseFulltextIndex luceneIndex, FulltextIndexDescriptor descriptor,
-                                  Runnable onClose )
+            Runnable onClose )
     {
         super( luceneIndex, descriptor );
         this.indexUpdateSink = indexUpdateSink;

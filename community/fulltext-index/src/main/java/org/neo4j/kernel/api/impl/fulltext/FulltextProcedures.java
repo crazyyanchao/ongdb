@@ -93,11 +93,11 @@ public class FulltextProcedures
     {
         Stream<AnalyzerProvider> stream = accessor.listAvailableAnalyzers();
         return stream.flatMap( provider ->
-                               {
-                                   String description = provider.description();
-                                   Spliterator<String> spliterator = provider.getKeys().spliterator();
-                                   return StreamSupport.stream( spliterator, false ).map( name -> new AvailableAnalyzer( name, description ) );
-                               } );
+        {
+            String description = provider.description();
+            Spliterator<String> spliterator = provider.getKeys().spliterator();
+            return StreamSupport.stream( spliterator, false ).map( name -> new AvailableAnalyzer( name, description ) );
+        } );
     }
 
     @Description( "Wait for the updates from recently committed transactions to be applied to any eventually-consistent fulltext indexes." )
@@ -108,7 +108,7 @@ public class FulltextProcedures
     }
 
     @Description( "Similar to db.awaitIndex(index, timeout), except instead of an index pattern, the index is specified by name. " +
-                  "The name can be quoted by backticks, if necessary." )
+            "The name can be quoted by backticks, if necessary." )
     @Procedure( name = "db.index.fulltext.awaitIndex", mode = READ )
     public void awaitIndex( @Name( "index" ) String index, @Name( value = "timeOutSeconds", defaultValue = "300" ) long timeout ) throws ProcedureException
     {
@@ -195,7 +195,7 @@ public class FulltextProcedures
         if ( entityType != EntityType.NODE )
         {
             throw new IllegalArgumentException( "The '" + name + "' index (" + indexReference + ") is an index on " + entityType +
-                                                ", so it cannot be queried for nodes." );
+                    ", so it cannot be queried for nodes." );
         }
 
         if ( sortProperty.isEmpty() )
@@ -227,7 +227,7 @@ public class FulltextProcedures
         if ( entityType != EntityType.RELATIONSHIP )
         {
             throw new IllegalArgumentException( "The '" + name + "' index (" + indexReference + ") is an index on " + entityType +
-                                                ", so it cannot be queried for relationships." );
+                    ", so it cannot be queried for relationships." );
         }
 
         if ( sortProperty.isEmpty() )
@@ -261,7 +261,7 @@ public class FulltextProcedures
         // We do the isAdded check on the transaction state first, because indexGetState will grab a schema read-lock, which can deadlock on the write-lock
         // held by the index populator. Also, if we index was created in this transaction, then we will never see it come online in this transaction anyway.
         // Indexes don't come online until the transaction that creates them has committed.
-        if ( !((KernelTransactionImplementation) tx).txState().indexDiffSetsBySchema( indexReference.schema() ).isAdded( (IndexDescriptor) indexReference ) )
+        if ( !((KernelTransactionImplementation)tx).txState().indexDiffSetsBySchema( indexReference.schema() ).isAdded( (IndexDescriptor) indexReference ) )
         {
             // If the index was not created in this transaction, then wait for it to come online before querying.
             Schema schema = db.schema();

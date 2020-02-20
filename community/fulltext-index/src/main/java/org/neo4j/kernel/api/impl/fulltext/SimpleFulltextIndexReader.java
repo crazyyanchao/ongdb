@@ -58,9 +58,9 @@ class SimpleFulltextIndexReader extends FulltextIndexReader
                                String[] sortProperties, Map<String,String> sortTypes )
     {
         this.searcherRef = searcherRef;
+        this.properties = properties;
         this.analyzer = analyzer;
         this.propertyKeyTokenHolder = propertyKeyTokenHolder;
-        this.properties = properties;
         this.sortProperties = sortProperties;
         this.sortTypes = sortTypes;
     }

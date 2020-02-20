@@ -149,14 +149,17 @@ public class LuceneFulltextDocumentStructure
             Value value = propertyValues[i];
             if ( value.valueGroup() == ValueGroup.TEXT )
             {
-                Query valueQuery = new ConstantScoreQuery( new TermQuery( new Term( propertyKey, value.asObject().toString() ) ) );
+                Query valueQuery = new ConstantScoreQuery(
+                        new TermQuery( new Term( propertyKey, value.asObject().toString() ) ) );
                 builder.add( valueQuery, BooleanClause.Occur.SHOULD );
             }
             else if ( value.valueGroup() == ValueGroup.NO_VALUE )
             {
-                Query valueQuery = new ConstantScoreQuery( new WildcardQuery( new Term( propertyKey, "*" ) ) );
+                Query valueQuery = new ConstantScoreQuery(
+                        new WildcardQuery( new Term( propertyKey, "*" ) ) );
                 builder.add( valueQuery, BooleanClause.Occur.MUST_NOT );
             }
+
         }
         return builder.build();
     }

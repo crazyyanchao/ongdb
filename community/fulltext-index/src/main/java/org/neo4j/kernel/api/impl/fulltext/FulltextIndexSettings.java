@@ -55,7 +55,7 @@ public class FulltextIndexSettings
     private static final String INDEX_CONFIG_SORT_MAP = "sortMap";
 
     static FulltextIndexDescriptor readOrInitialiseDescriptor( StoreIndexDescriptor descriptor, String defaultAnalyzerName,
-                                                               TokenHolder propertyKeyTokenHolder, File indexFolder, FileSystemAbstraction fileSystem )
+            TokenHolder propertyKeyTokenHolder, File indexFolder, FileSystemAbstraction fileSystem )
     {
         Properties indexConfiguration = new Properties();
 
@@ -87,7 +87,8 @@ public class FulltextIndexSettings
             }
             catch ( TokenNotFoundException e )
             {
-                throw new IllegalStateException( "Property key id not found.", new PropertyKeyIdNotFoundKernelException( propertyKeyId, e ) );
+                throw new IllegalStateException( "Property key id not found.",
+                        new PropertyKeyIdNotFoundKernelException( propertyKeyId, e ) );
             }
         }
         List<String> propertyNames = Collections.unmodifiableList( names );
@@ -180,7 +181,7 @@ public class FulltextIndexSettings
         settings.setProperty( "_schema_entityTokenIds", Arrays.toString( schema.getEntityTokenIds() ) );
         settings.setProperty( "_sortIds", Arrays.toString( schema.getSortIds() ) );
         try ( StoreChannel channel = fs.create( indexConfigFile );
-              Writer writer = fs.openAsWriter( indexConfigFile, StandardCharsets.UTF_8, false ) )
+                Writer writer = fs.openAsWriter( indexConfigFile, StandardCharsets.UTF_8, false ) )
         {
             settings.store( writer, "Auto-generated file. Do not modify!" );
             writer.flush();

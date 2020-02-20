@@ -73,7 +73,7 @@ public class LabelSchemaDescriptor implements org.neo4j.internal.kernel.api.sche
     public String userDescription( TokenNameLookup tokenNameLookup )
     {
         return String.format( ":%s(%s)", tokenNameLookup.labelGetName( labelId ),
-                              SchemaUtil.niceProperties( tokenNameLookup, propertyIds ) );
+                SchemaUtil.niceProperties( tokenNameLookup, propertyIds ) );
     }
 
     @Override
@@ -123,7 +123,7 @@ public class LabelSchemaDescriptor implements org.neo4j.internal.kernel.api.sche
     {
         if ( o instanceof LabelSchemaDescriptor )
         {
-            LabelSchemaDescriptor that = (LabelSchemaDescriptor) o;
+            LabelSchemaDescriptor that = (LabelSchemaDescriptor)o;
             return labelId == that.getLabelId() && Arrays.equals( propertyIds, that.getPropertyIds() );
         }
         return false;

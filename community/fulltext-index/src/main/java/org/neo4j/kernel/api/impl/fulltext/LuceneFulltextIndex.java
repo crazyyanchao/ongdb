@@ -50,7 +50,7 @@ public class LuceneFulltextIndex extends AbstractLuceneIndex<FulltextIndexReader
     private final Map<String,String> sortTypes;
 
     LuceneFulltextIndex( PartitionedIndexStorage storage, IndexPartitionFactory partitionFactory, FulltextIndexDescriptor descriptor,
-                         TokenHolder propertyKeyTokenHolder )
+            TokenHolder propertyKeyTokenHolder )
     {
         super( storage, partitionFactory, descriptor );
         this.analyzer = descriptor.analyzer();

@@ -74,7 +74,7 @@ public class RelationTypeSchemaDescriptor implements org.neo4j.internal.kernel.a
     public String userDescription( TokenNameLookup tokenNameLookup )
     {
         return String.format( "-[:%s(%s)]-", tokenNameLookup.relationshipTypeGetName( relTypeId ),
-                              SchemaUtil.niceProperties( tokenNameLookup, propertyIds ) );
+                SchemaUtil.niceProperties( tokenNameLookup, propertyIds ) );
     }
 
     @Override
@@ -124,7 +124,7 @@ public class RelationTypeSchemaDescriptor implements org.neo4j.internal.kernel.a
     {
         if ( o instanceof RelationTypeSchemaDescriptor )
         {
-            RelationTypeSchemaDescriptor that = (RelationTypeSchemaDescriptor) o;
+            RelationTypeSchemaDescriptor that = (RelationTypeSchemaDescriptor)o;
             return relTypeId == that.getRelTypeId() && Arrays.equals( propertyIds, that.getPropertyIds() );
         }
         return false;

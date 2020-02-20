@@ -37,29 +37,6 @@ class FulltextIndexDescriptor extends StoreIndexDescriptor
     private final List<String> sortProperties;
     private final Map<String,String> sortTypes;
 
-    FulltextIndexDescriptor( StoreIndexDescriptor descriptor, List<String> propertyNames, Analyzer analyzer, String analyzerName, boolean eventuallyConsistent )
-    {
-        super( descriptor );
-        this.propertyNames = propertyNames;
-        this.analyzer = analyzer;
-        this.analyzerName = analyzerName;
-        this.eventuallyConsistent = eventuallyConsistent;
-        this.sortProperties = null;
-        this.sortTypes = null;
-    }
-
-    FulltextIndexDescriptor( StoreIndexDescriptor indexDescriptor, List<String> propertyNames, Analyzer analyzer, String analyzerName,
-                             boolean eventuallyConsistent, List<String> sortProperties )
-    {
-        super( indexDescriptor );
-        this.propertyNames = propertyNames;
-        this.analyzer = analyzer;
-        this.analyzerName = analyzerName;
-        this.eventuallyConsistent = eventuallyConsistent;
-        this.sortProperties = sortProperties;
-        this.sortTypes = null;
-    }
-
     FulltextIndexDescriptor( StoreIndexDescriptor indexDescriptor, List<String> propertyNames, Analyzer analyzer, String analyzerName,
                              boolean eventuallyConsistent, List<String> sortProperties, Map<String,String> sortTypes )
     {

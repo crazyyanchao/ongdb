@@ -35,7 +35,7 @@ class TransactionStateFulltextIndexReader extends FulltextIndexReader
     private final MutableLongSet modifiedEntityIdsInThisTransaction;
 
     TransactionStateFulltextIndexReader( FulltextIndexReader baseReader, FulltextIndexReader nearRealTimeReader,
-                                         MutableLongSet modifiedEntityIdsInThisTransaction )
+            MutableLongSet modifiedEntityIdsInThisTransaction )
     {
         this.baseReader = baseReader;
         this.nearRealTimeReader = nearRealTimeReader;

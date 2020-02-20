@@ -93,9 +93,8 @@ class FulltextIndexProvider extends IndexProvider implements FulltextAdapter, Au
     private final IndexStorageFactory indexStorageFactory;
 
     FulltextIndexProvider( IndexProviderDescriptor descriptor, IndexDirectoryStructure.Factory directoryStructureFactory,
-                           FileSystemAbstraction fileSystem, Config config, TokenHolders tokenHolders, DirectoryFactory directoryFactory,
-                           OperationalMode operationalMode,
-                           JobScheduler scheduler, AuxiliaryTransactionStateManager auxiliaryTransactionStateManager, Log log )
+            FileSystemAbstraction fileSystem, Config config, TokenHolders tokenHolders, DirectoryFactory directoryFactory, OperationalMode operationalMode,
+            JobScheduler scheduler, AuxiliaryTransactionStateManager auxiliaryTransactionStateManager, Log log )
     {
         super( descriptor, directoryStructureFactory );
         this.fileSystem = fileSystem;
@@ -192,7 +191,7 @@ class FulltextIndexProvider extends IndexProvider implements FulltextAdapter, Au
         {
             // The fulltext index provider only support fulltext indexes.
             throw new MisconfiguredIndexException( InvalidArguments, "The index provider '" + getProviderDescriptor() + "' only supports fulltext index " +
-                                                                     "descriptors. Make sure that fulltext indexes are created using the relevant fulltext index procedures." );
+                    "descriptors. Make sure that fulltext indexes are created using the relevant fulltext index procedures." );
         }
         return super.bless( index );
     }
@@ -246,8 +245,7 @@ class FulltextIndexProvider extends IndexProvider implements FulltextAdapter, Au
         }
         log.debug( "Creating populator for fulltext schema index: %s", descriptor );
         return new FulltextIndexPopulator( fulltextIndexDescriptor, fulltextIndex,
-                                           () -> FulltextIndexSettings
-                                                   .saveFulltextIndexSettings( fulltextIndexDescriptor, indexStorage.getIndexFolder(), fileSystem ) );
+                () -> FulltextIndexSettings.saveFulltextIndexSettings( fulltextIndexDescriptor, indexStorage.getIndexFolder(), fileSystem ) );
     }
 
     @Override
@@ -294,7 +292,7 @@ class FulltextIndexProvider extends IndexProvider implements FulltextAdapter, Au
         if ( entityTokens.length == 0 )
         {
             throw new BadSchemaException(
-                    "At least one " + (type == EntityType.NODE ? "label" : "relationship type") + " must be specified when creating a fulltext index." );
+                    "At least one " + ( type == EntityType.NODE ? "label" : "relationship type" ) + " must be specified when creating a fulltext index." );
         }
         if ( properties.length == 0 )
         {
@@ -303,7 +301,7 @@ class FulltextIndexProvider extends IndexProvider implements FulltextAdapter, Au
         if ( Arrays.asList( properties ).contains( LuceneFulltextDocumentStructure.FIELD_ENTITY_ID ) )
         {
             throw new BadSchemaException( "Unable to index the property, the name is reserved for internal use " +
-                                          LuceneFulltextDocumentStructure.FIELD_ENTITY_ID );
+                    LuceneFulltextDocumentStructure.FIELD_ENTITY_ID );
         }
         int[] entityTokenIds = new int[entityTokens.length];
         if ( type == EntityType.NODE )
