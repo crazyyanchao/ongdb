@@ -141,7 +141,7 @@ public class FulltextProcedures
     {
         Properties indexConfiguration = new Properties();
         indexConfiguration.putAll( indexConfigurationMap );
-        SchemaDescriptor schemaDescriptor = accessor.schemaForSort( EntityType.NODE, stringArray( labels ), indexConfiguration, stringArray( properties ),
+        SchemaDescriptor schemaDescriptor = accessor.schemaSortFor( EntityType.NODE, stringArray( labels ), indexConfiguration, stringArray( properties ),
                                                                     stringArray( sortProperties.keySet() ), sortProperties );
         tx.schemaWrite().indexCreate( schemaDescriptor, DESCRIPTOR.name(), Optional.of( name ) );
     }
@@ -169,7 +169,7 @@ public class FulltextProcedures
     {
         Properties settings = new Properties();
         settings.putAll( config );
-        SchemaDescriptor schemaDescriptor = accessor.schemaForSort( EntityType.RELATIONSHIP, stringArray( relTypes ), settings, stringArray( properties ),
+        SchemaDescriptor schemaDescriptor = accessor.schemaSortFor( EntityType.RELATIONSHIP, stringArray( relTypes ), settings, stringArray( properties ),
                                                                     stringArray( sortProperties.keySet() ), sortProperties );
         tx.schemaWrite().indexCreate( schemaDescriptor, DESCRIPTOR.name(), Optional.of( name ) );
     }

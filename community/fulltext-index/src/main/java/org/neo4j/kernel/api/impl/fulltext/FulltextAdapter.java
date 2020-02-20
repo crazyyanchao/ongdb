@@ -36,7 +36,7 @@ public interface FulltextAdapter
 {
     SchemaDescriptor schemaFor( EntityType type, String[] entityTokens, Properties indexConfiguration, String... properties );
 
-    SchemaDescriptor schemaForSort( EntityType type, String[] entityTokens, Properties indexConfiguration, String[] properties, String[] sortProperties,
+    SchemaDescriptor schemaSortFor( EntityType type, String[] entityTokens, Properties indexConfiguration, String[] properties, String[] sortProperties,
                                     Map<String,String> sortTypes );
 
     ScoreEntityIterator query( KernelTransaction tx, String indexName, String queryString ) throws IOException, IndexNotFoundKernelException, ParseException;

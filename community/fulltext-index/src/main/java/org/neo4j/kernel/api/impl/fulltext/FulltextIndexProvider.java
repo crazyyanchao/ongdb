@@ -323,7 +323,7 @@ class FulltextIndexProvider extends IndexProvider implements FulltextAdapter, Au
     }
 
     @Override
-    public SchemaDescriptor schemaForSort( EntityType type, String[] entityTokens, Properties indexConfiguration, String[] properties, String[] sortProperties,
+    public SchemaDescriptor schemaSortFor( EntityType type, String[] entityTokens, Properties indexConfiguration, String[] properties, String[] sortProperties,
                                            Map<String,String> sortTypes )
     {
         if ( entityTokens.length == 0 )
