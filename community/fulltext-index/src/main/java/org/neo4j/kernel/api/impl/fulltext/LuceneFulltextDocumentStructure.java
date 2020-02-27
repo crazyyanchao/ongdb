@@ -52,7 +52,6 @@ import static org.apache.lucene.util.ByteBlockPool.BYTE_BLOCK_SIZE;
 public class LuceneFulltextDocumentStructure
 {
     public static final String FIELD_ENTITY_ID = "__neo4j__lucene__fulltext__index__internal__id__";
-    public static final String FIELD_FULLTEXT_SORT_SUFFIX = "__neo4j__lucene__sort__index__internal__id__";
 
     private static final ThreadLocal<DocWithId> perThreadDocument = ThreadLocal.withInitial( DocWithId::new );
 
@@ -218,6 +217,12 @@ public class LuceneFulltextDocumentStructure
             }
         }
 
+        /**
+         * The fulltext properties are indexed normally. The sort properties are mapped to their corresponding DocValue Field and indexed.
+         *
+         * If a regular property is also a sort property then the document will have multiple fields with a common name.
+         * This is OK. The similarly named fields are different internally and thus are not redundant.
+         */
         private void setValuesWithSort( Collection<String> propertyNames, Value[] values, Collection<String> sortProperties, Map<String,String> sortTypes )
         {
             int i = 0;
@@ -229,16 +234,6 @@ public class LuceneFulltextDocumentStructure
                 if ( value != null && value.valueGroup() == ValueGroup.TEXT )
                 {
                     addFulltextFieldToDocument( name, value );
-                }
-
-                if ( sortProperties.contains( name ) )
-                {
-                    // Also encode a sortable version with a special name
-                    Field sortableField = encodeSortableValueField( name + FIELD_FULLTEXT_SORT_SUFFIX, value );
-                    if ( sortableField != null )
-                    {
-                        document.add( sortableField );
-                    }
                 }
             }
 

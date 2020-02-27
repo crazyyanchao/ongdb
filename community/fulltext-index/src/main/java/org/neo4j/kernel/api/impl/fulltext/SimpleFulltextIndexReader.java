@@ -123,11 +123,6 @@ class SimpleFulltextIndexReader extends FulltextIndexReader
             {
                 sort = buildSort( sortFieldString, reverseSortOrder );
             }
-            else if ( Arrays.asList( properties ).contains( sortFieldString ) )
-            {
-                sort = new Sort( new SortField( sortFieldString + LuceneFulltextDocumentStructure.FIELD_FULLTEXT_SORT_SUFFIX, SortField.Type.STRING,
-                                                reverseSortOrder ) );
-            }
             else
             {
                 throw new IOException( "Sort Field '" + sortFieldString + "' is not an indexed property." );
