@@ -424,14 +424,8 @@ public class SchemaRuleSerialization
                 target.put( SIMPLE_REL_TYPE );
             }
 
-            int[] propIds = schema.getPropertyIds();
-            if ( schema instanceof MultiTokenSchemaDescriptor )
-            {
-                propIds = Arrays.stream( schema.getPropertyIds() ).limit( schema.getPropertyIds().length - schema.getSortIds().length ).toArray();
-            }
-
             putIds( schema.getEntityTokenIds() );
-            putIds( propIds );
+            putIds( schema.getPropertyIdsNoSorts() );
             putIds( schema.getSortIds() );
         }
 
@@ -475,7 +469,7 @@ public class SchemaRuleSerialization
                     + 2 // entity token count
                     + 4 * schema.getEntityTokenIds().length // the actual property ids
                     + 2 // property id count
-                    + 4 * (schema.getPropertyIds().length - schema.getSortIds().length)// the actual property ids
+                    + 4 * schema.getPropertyIdsNoSorts().length // the actual property ids
                     + 2 // sort id count
                     + 4 * schema.getSortIds().length; // the actual sort ids
         }

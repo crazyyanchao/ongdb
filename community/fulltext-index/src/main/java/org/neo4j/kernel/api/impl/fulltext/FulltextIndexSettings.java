@@ -60,18 +60,12 @@ public class FulltextIndexSettings
         Properties indexConfiguration = new Properties();
 
         boolean isFulltextSD = false;
-        int[] propIds = descriptor.schema().getPropertyIds();
+        int[] propIds = descriptor.schema().getPropertyIdsNoSorts();
         if ( descriptor.schema() instanceof FulltextSchemaDescriptor )
         {
             FulltextSchemaDescriptor schema = (FulltextSchemaDescriptor) descriptor.schema();
             indexConfiguration.putAll( schema.getIndexConfiguration() );
-            propIds = Arrays.stream( schema.getPropertyIds() ).limit( schema.getPropertyIds().length - schema.getSortIds().length ).toArray();
             isFulltextSD = true;
-        }
-        else if ( descriptor.schema() instanceof MultiTokenSchemaDescriptor )
-        {
-            SchemaDescriptor schema = descriptor.schema();
-            propIds = Arrays.stream( schema.getPropertyIds() ).limit( schema.getPropertyIds().length - schema.getSortIds().length ).toArray();
         }
         loadPersistedSettings( indexConfiguration, indexFolder, fileSystem );
         boolean eventuallyConsistent = Boolean.parseBoolean( indexConfiguration.getProperty( INDEX_CONFIG_EVENTUALLY_CONSISTENT ) );
