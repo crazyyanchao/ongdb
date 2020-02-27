@@ -28,6 +28,7 @@ import org.junit.rules.RuleChain;
 import org.junit.rules.Timeout;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -115,7 +116,7 @@ public class FulltextSortTest
             row = result.next();
             assertEquals( "INDEX ON NODE:Label1(prop1)", row.get( "description" ) );
             assertEquals( asList( "Label1" ), row.get( "tokenNames" ) );
-            assertEquals( asList( "prop1", "sortProp" ), row.get( "properties" ) );
+            assertEquals( asList( "prop1" ), row.get( "properties" ) );
             assertEquals( asList( "sortProp" ), row.get( "sortProperties" ) );
             assertEquals( "sort-index", row.get( "indexName" ) );
             assertEquals( "node_fulltext", row.get( "type" ) );
@@ -141,7 +142,7 @@ public class FulltextSortTest
             row = result.next();
             assertEquals( "INDEX ON NODE:Label1(prop1)", row.get( "description" ) );
             assertEquals( "ONLINE", row.get( "state" ) );
-            assertEquals( asList( "prop1", "sortProp" ), row.get( "properties" ) );
+            assertEquals( asList( "prop1" ), row.get( "properties" ) );
             assertEquals( asList( "sortProp" ), row.get( "sortProperties" ) );
             assertFalse( result.hasNext() );
             //noinspection ConstantConditions
@@ -155,7 +156,7 @@ public class FulltextSortTest
     public void createRelationshipFulltextSortIndex()
     {
         db = createDatabase();
-        String sortMap = "{sortProp: \"LONG\"}";
+        String sortMap = "{sortProp: \"LONG\", prop1: \"STRING\"}";
         db.execute( format( RELATIONSHIP_CREATE_SORT, "sort-index", array( "Reltype1" ), array( "prop1" ), "{}", sortMap ) ).close();
         Result result;
         Map<String,Object> row;
@@ -166,8 +167,8 @@ public class FulltextSortTest
             row = result.next();
             assertEquals( "INDEX ON RELATIONSHIP:Reltype1(prop1)", row.get( "description" ) );
             assertEquals( asList( "Reltype1" ), row.get( "tokenNames" ) );
-            assertEquals( asList( "prop1", "sortProp" ), row.get( "properties" ) );
-            assertEquals( asList( "sortProp" ), row.get( "sortProperties" ) );
+            assertEquals( asList( "prop1" ), row.get( "properties" ) );
+            assertEquals( asList( "prop1", "sortProp" ), row.get( "sortProperties" ) );
             assertEquals( "sort-index", row.get( "indexName" ) );
             assertEquals( "relationship_fulltext", row.get( "type" ) );
             assertFalse( result.hasNext() );
@@ -190,8 +191,8 @@ public class FulltextSortTest
             row = result.next();
             assertEquals( "INDEX ON RELATIONSHIP:Reltype1(prop1)", row.get( "description" ) );
             assertEquals( "ONLINE", row.get( "state" ) );
-            assertEquals( asList( "prop1", "sortProp" ), row.get( "properties" ) );
-            assertEquals( asList( "sortProp" ), row.get( "sortProperties" ) );
+            assertEquals( asList( "prop1" ), row.get( "properties" ) );
+            assertEquals( asList( "prop1", "sortProp" ), row.get( "sortProperties" ) );
             assertFalse( result.hasNext() );
             //noinspection ConstantConditions
             assertFalse( result.hasNext() );
@@ -422,7 +423,7 @@ public class FulltextSortTest
     {
         final Label PERSON = Label.label( "Person" );
 
-        String sortMap = "{" + BORN + ": \"LONG\", " + COLOR + ": \"STRING\", " + HEIGHT + ": \"DOUBLE\"}";
+        String sortMap = "{" + BORN + ": \"LONG\", " + COLOR + ": \"STRING\", " + HEIGHT + ": \"DOUBLE\", " + NAME + ": \"STRING\"}";
         db.execute( format( NODE_CREATE_SORT, "sort-index", array( "Person" ), array( NAME ), "{}", sortMap ) ).close();
 
         try ( Transaction tx = db.beginTx() )
