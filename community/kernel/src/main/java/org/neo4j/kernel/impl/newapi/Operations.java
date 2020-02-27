@@ -1324,10 +1324,10 @@ public class Operations implements Write, ExplicitIndexWrite, SchemaWrite
     private static void assertValidDescriptor( SchemaDescriptor descriptor, SchemaKernelException.OperationContext context )
             throws RepeatedSchemaComponentException
     {
-        long numUniqueProp = Arrays.stream( descriptor.getPropertyIds() ).distinct().count();
+        long numUniqueProp = Arrays.stream( descriptor.getPropertyIdsNoSorts() ).distinct().count();
         long numUniqueEntityTokens = Arrays.stream( descriptor.getEntityTokenIds() ).distinct().count();
 
-        if ( numUniqueProp != descriptor.getPropertyIds().length )
+        if ( numUniqueProp != descriptor.getPropertyIdsNoSorts().length )
         {
             throw new RepeatedPropertyInSchemaException( descriptor, context );
         }
