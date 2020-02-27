@@ -710,7 +710,7 @@ public class BuiltInProcedures
 
     private static List<String> propertyNames( TokenNameLookup tokens, IndexReference index )
     {
-        int[] propertyIds = index.properties();
+        int[] propertyIds = index.schema().getPropertyIdsNoSorts();
         List<String> propertyNames = new ArrayList<>( propertyIds.length );
         for ( int propertyId : propertyIds )
         {
