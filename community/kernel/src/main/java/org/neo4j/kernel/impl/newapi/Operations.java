@@ -1327,7 +1327,13 @@ public class Operations implements Write, ExplicitIndexWrite, SchemaWrite
         long numUniqueProp = Arrays.stream( descriptor.getPropertyIdsNoSorts() ).distinct().count();
         long numUniqueEntityTokens = Arrays.stream( descriptor.getEntityTokenIds() ).distinct().count();
 
+        long numUniqueSort = Arrays.stream( descriptor.getSortIds() ).distinct().count();
+
         if ( numUniqueProp != descriptor.getPropertyIdsNoSorts().length )
+        {
+            throw new RepeatedPropertyInSchemaException( descriptor, context );
+        }
+        if ( numUniqueSort != descriptor.getSortIds().length )
         {
             throw new RepeatedPropertyInSchemaException( descriptor, context );
         }
