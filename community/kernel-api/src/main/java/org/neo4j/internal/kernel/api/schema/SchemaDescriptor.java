@@ -71,6 +71,12 @@ public interface SchemaDescriptor extends SchemaDescriptorSupplier
         }
 
         @Override
+        public int[] getPropertyIdsNoSorts()
+        {
+            return new int[0];
+        }
+
+        @Override
         public int[] getSortIds()
         {
             return new int[0];
@@ -184,6 +190,8 @@ public interface SchemaDescriptor extends SchemaDescriptorSupplier
      * @return the property ids
      */
     int[] getPropertyIds();
+
+    int[] getPropertyIdsNoSorts();
 
     /**
      * Assume that this schema descriptor describes a schema that includes a single property id, and return that id.

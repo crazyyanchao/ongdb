@@ -113,6 +113,12 @@ public class LabelSchemaDescriptor implements org.neo4j.internal.kernel.api.sche
     }
 
     @Override
+    public int[] getPropertyIdsNoSorts()
+    {
+        return propertyIds;
+    }
+
+    @Override
     public int[] getEntityTokenIds()
     {
         return new int[]{labelId};

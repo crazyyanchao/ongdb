@@ -108,6 +108,12 @@ public class MultiTokenSchemaDescriptor implements SchemaDescriptor
     }
 
     @Override
+    public int[] getPropertyIdsNoSorts()
+    {
+        return propertyIds;
+    }
+
+    @Override
     public int[] getEntityTokenIds()
     {
         return entityTokens;

@@ -90,6 +90,12 @@ public class RelationTypeSchemaDescriptor implements org.neo4j.internal.kernel.a
     }
 
     @Override
+    public int[] getPropertyIdsNoSorts()
+    {
+        return propertyIds;
+    }
+
+    @Override
     public int[] getEntityTokenIds()
     {
         return new int[]{relTypeId};
