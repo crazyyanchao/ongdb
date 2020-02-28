@@ -26,7 +26,7 @@ public enum FulltextSortType
 
     int neoStoreByte;
 
-    private FulltextSortType(final Integer neoStoreByte)
+    FulltextSortType( final Integer neoStoreByte )
     {
         this.neoStoreByte = neoStoreByte;
     }

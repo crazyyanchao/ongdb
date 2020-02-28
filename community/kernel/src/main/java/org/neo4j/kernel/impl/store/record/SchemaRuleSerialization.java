@@ -370,8 +370,8 @@ public class SchemaRuleSerialization
         int[] entityTokenIds = readTokenIdList( source );
         int[] propertyIds = readTokenIdList( source );
         int[] sortIds = readTokenIdList( source );
-        // Should read in    int[] sortTypes    here.
-        return SchemaDescriptorFactory.multiToken( entityTokenIds, type, propertyIds, sortIds );
+        int[] sortTypes = readTokenIdList( source );
+        return SchemaDescriptorFactory.multiToken( entityTokenIds, type, propertyIds, sortIds, sortTypes );
     }
 
     private static int[] readTokenIdList( ByteBuffer source )
@@ -428,6 +428,7 @@ public class SchemaRuleSerialization
             putIds( schema.getEntityTokenIds() );
             putIds( schema.getPropertyIdsNoSorts() );
             putIds( schema.getSortIds() );
+            putIds( schema.getSortTypes() );
         }
 
         private void putIds( int[] ids )
@@ -472,7 +473,9 @@ public class SchemaRuleSerialization
                     + 2 // property id count
                     + 4 * schema.getPropertyIdsNoSorts().length // the actual property ids
                     + 2 // sort id count
-                    + 4 * schema.getSortIds().length; // the actual sort ids
+                    + 4 * schema.getSortIds().length // the actual sort ids
+                    + 2 // sort type count
+                    + 4 * schema.getSortTypes().length; // the actual sort types
         }
     };
 }

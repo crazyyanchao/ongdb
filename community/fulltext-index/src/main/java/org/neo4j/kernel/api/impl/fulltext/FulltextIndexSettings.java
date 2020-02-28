@@ -52,20 +52,17 @@ public class FulltextIndexSettings
     public static final String INDEX_CONFIG_EVENTUALLY_CONSISTENT = "eventually_consistent";
     private static final String INDEX_CONFIG_FILE = "fulltext-index.properties";
     private static final String INDEX_CONFIG_PROPERTY_NAMES = "propertyNames";
-    private static final String INDEX_CONFIG_SORT_MAP = "sortMap";
 
     static FulltextIndexDescriptor readOrInitialiseDescriptor( StoreIndexDescriptor descriptor, String defaultAnalyzerName,
             TokenHolder propertyKeyTokenHolder, File indexFolder, FileSystemAbstraction fileSystem )
     {
         Properties indexConfiguration = new Properties();
 
-        boolean isFulltextSD = false;
         int[] propIds = descriptor.schema().getPropertyIdsNoSorts();
         if ( descriptor.schema() instanceof FulltextSchemaDescriptor )
         {
             FulltextSchemaDescriptor schema = (FulltextSchemaDescriptor) descriptor.schema();
             indexConfiguration.putAll( schema.getIndexConfiguration() );
-            isFulltextSD = true;
         }
         loadPersistedSettings( indexConfiguration, indexFolder, fileSystem );
         boolean eventuallyConsistent = Boolean.parseBoolean( indexConfiguration.getProperty( INDEX_CONFIG_EVENTUALLY_CONSISTENT ) );
@@ -86,20 +83,6 @@ public class FulltextIndexSettings
             }
         }
         List<String> propertyNames = Collections.unmodifiableList( names );
-
-        // Read in sortMap configuration
-//        Map<String,String> sortMap = new HashMap<>();
-//        if ( indexConfiguration.containsKey( INDEX_CONFIG_SORT_MAP ) )
-//        {
-//            try
-//            {
-//                sortMap = readSortMapProperty( indexConfiguration.getProperty( INDEX_CONFIG_SORT_MAP ) );
-//            }
-//            catch ( Exception e )
-//            {
-//                throw new IllegalStateException( "Unable to read 'sortMap' loading in FullIndexSettings", e );
-//            }
-//        }
 
         List<String> sortNames = new ArrayList<>();
         Map<String,String> sortTypes = new HashMap<>();
@@ -125,29 +108,7 @@ public class FulltextIndexSettings
             {
                 throw new IllegalStateException( "Property key id not found.", new PropertyKeyIdNotFoundKernelException( sortId, e ) );
             }
-
         }
-
-//        for ( int propertyKeyId : descriptor.schema().getSortIds() )
-//        {
-//            try
-//            {
-//                String name = propertyKeyTokenHolder.getTokenById( propertyKeyId ).name();
-//                sortNames.add( name );
-//                if ( isFulltextSD )
-//                {
-//                    sortTypes.put( name, ((FulltextSchemaDescriptor) descriptor.schema()).getSortType( name ) );
-//                }
-//                else if ( sortMap.containsKey( name ) )
-//                {
-//                    sortTypes.put( name, sortMap.get( name ) );
-//                }
-//            }
-//            catch ( TokenNotFoundException e )
-//            {
-//                throw new IllegalStateException( "Property key id not found.", new PropertyKeyIdNotFoundKernelException( propertyKeyId, e ) );
-//            }
-//        }
         List<String> sortPropertyNames = Collections.unmodifiableList( sortNames );
 
         return new FulltextIndexDescriptor( descriptor, propertyNames, analyzer, analyzerName, eventuallyConsistent, sortPropertyNames, sortTypes );
@@ -193,12 +154,12 @@ public class FulltextIndexSettings
         settings.setProperty( INDEX_CONFIG_EVENTUALLY_CONSISTENT, Boolean.toString( descriptor.isEventuallyConsistent() ) );
         settings.setProperty( INDEX_CONFIG_ANALYZER, descriptor.analyzerName() );
         settings.setProperty( INDEX_CONFIG_PROPERTY_NAMES, descriptor.propertyNames().stream().collect( Collectors.joining( ", ", "[", "]" ) ) );
-        settings.setProperty( INDEX_CONFIG_SORT_MAP, writeSortMapProperty( descriptor ) );
         settings.setProperty( "_propertyIds", Arrays.toString( propIds ) );
         settings.setProperty( "_name", descriptor.name() );
         settings.setProperty( "_schema_entityType", schema.entityType().name() );
         settings.setProperty( "_schema_entityTokenIds", Arrays.toString( schema.getEntityTokenIds() ) );
         settings.setProperty( "_sortIds", Arrays.toString( schema.getSortIds() ) );
+        settings.setProperty( "_sortTypes", Arrays.toString( schema.getSortTypes() ) );
         try ( StoreChannel channel = fs.create( indexConfigFile );
                 Writer writer = fs.openAsWriter( indexConfigFile, StandardCharsets.UTF_8, false ) )
         {
@@ -206,22 +167,5 @@ public class FulltextIndexSettings
             writer.flush();
             channel.force( true );
         }
-    }
-
-    private static String writeSortMapProperty( FulltextIndexDescriptor descriptor )
-    {
-        return descriptor.sortTypes().entrySet().stream().map( e -> e.getKey() + ":" + e.getValue() ).collect( Collectors.joining( ", ", "{", "}" ) );
-    }
-
-    private static Map<String,String> readSortMapProperty( String sortMapProperty )
-    {
-        sortMapProperty = sortMapProperty.substring( 1, sortMapProperty.length() - 1 );
-        String[] tokens = sortMapProperty.split( ",\\s|:" );
-        Map<String,String> map = new HashMap<>();
-        for ( int i = 0; i < tokens.length - 1; )
-        {
-            map.put( tokens[i++], tokens[i++] );
-        }
-        return map;
     }
 }

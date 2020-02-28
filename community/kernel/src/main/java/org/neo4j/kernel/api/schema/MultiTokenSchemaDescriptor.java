@@ -42,7 +42,6 @@ public class MultiTokenSchemaDescriptor implements SchemaDescriptor
     private final int[] propertyIds;
 
     private final int[] sortIds;
-//    private final Map<String,String> sortTypes;
     private final int[] sortTypes;
 
     MultiTokenSchemaDescriptor( int[] entityTokens, EntityType entityType, int[] propertyIds )
@@ -51,7 +50,6 @@ public class MultiTokenSchemaDescriptor implements SchemaDescriptor
         this.entityType = entityType;
         this.propertyIds = propertyIds;
         this.sortIds = new int[0];
-//        this.sortTypes = Collections.emptyMap();
         this.sortTypes = new int[0];
     }
 
@@ -162,11 +160,6 @@ public class MultiTokenSchemaDescriptor implements SchemaDescriptor
     {
         return sortTypes;
     }
-
-    //    public Map<String,String> getSortTypes()
-//    {
-//        return sortTypes;
-//    }
 
     @Override
     public boolean equals( Object o )

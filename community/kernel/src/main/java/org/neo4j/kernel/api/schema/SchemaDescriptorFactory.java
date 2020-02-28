@@ -62,13 +62,13 @@ public class SchemaDescriptorFactory
         return new MultiTokenSchemaDescriptor( entityTokens, entityType, propertyIds );
     }
 
-    public static MultiTokenSchemaDescriptor multiToken( int[] entityTokens, EntityType entityType, int[] propertyIds, int[] sortIds )
+    public static MultiTokenSchemaDescriptor multiToken( int[] entityTokens, EntityType entityType, int[] propertyIds, int[] sortIds, int[] sortTypes )
     {
-       return multiTokenSort( entityTokens, entityType, propertyIds, sortIds, new HashMap<>(  ) );
+       return multiTokenSort( entityTokens, entityType, propertyIds, sortIds, sortTypes );
     }
 
     public static MultiTokenSchemaDescriptor multiTokenSort( int[] entityTokens, EntityType entityType, int[] propertyIds, int[] sortIds,
-                                                             Map<String,String> sortTypes )
+                                                             int[] sortTypes )
     {
         validatePropertyIds( propertyIds );
         validatePropertyIds( sortIds );

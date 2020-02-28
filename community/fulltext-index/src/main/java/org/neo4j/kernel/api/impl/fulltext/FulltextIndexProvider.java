@@ -355,8 +355,9 @@ class FulltextIndexProvider extends IndexProvider implements FulltextAdapter, Au
         }
         int[] propertyIds = Arrays.stream( properties ).mapToInt( tokenHolders.propertyKeyTokens()::getOrCreateId ).toArray();
         int[] sortIds = Arrays.stream( sortProperties ).mapToInt( tokenHolders.propertyKeyTokens()::getOrCreateId ).toArray();
+        int[] sortTypesArray = determineSortTypesFromMap( sortProperties, sortTypes );
 
-        SchemaDescriptor schema = SchemaDescriptorFactory.multiTokenSort( entityTokenIds, type, propertyIds, sortIds, sortTypes );
+        SchemaDescriptor schema = SchemaDescriptorFactory.multiTokenSort( entityTokenIds, type, propertyIds, sortIds, sortTypesArray );
         indexConfiguration.putIfAbsent( FulltextIndexSettings.INDEX_CONFIG_ANALYZER, defaultAnalyzerName );
         indexConfiguration.putIfAbsent( FulltextIndexSettings.INDEX_CONFIG_EVENTUALLY_CONSISTENT, defaultEventuallyConsistentSetting );
         return new FulltextSchemaDescriptor( schema, indexConfiguration );
@@ -441,5 +442,17 @@ class FulltextIndexProvider extends IndexProvider implements FulltextAdapter, Au
     private boolean isValidSortType( String sortType )
     {
         return FulltextSortType.valueOfIgnoreCase( sortType ) != null;
+    }
+
+    private int[] determineSortTypesFromMap( String[] sortProperties, Map<String,String> sortMap )
+    {
+        int[] sortTypesArray = new int[sortProperties.length];
+        int i = 0;
+        for ( String sortProperty : sortProperties )
+        {
+            sortTypesArray[i] = FulltextSortType.valueOfIgnoreCase( sortMap.get( sortProperty ) ).neoStoreByte;
+            i++;
+        }
+        return sortTypesArray;
     }
 }
