@@ -370,6 +370,7 @@ public class SchemaRuleSerialization
         int[] entityTokenIds = readTokenIdList( source );
         int[] propertyIds = readTokenIdList( source );
         int[] sortIds = readTokenIdList( source );
+        // Should read in    int[] sortTypes    here.
         return SchemaDescriptorFactory.multiToken( entityTokenIds, type, propertyIds, sortIds );
     }
 

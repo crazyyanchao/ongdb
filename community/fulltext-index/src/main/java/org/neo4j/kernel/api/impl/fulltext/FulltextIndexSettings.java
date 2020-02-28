@@ -41,9 +41,9 @@ import org.neo4j.internal.kernel.api.exceptions.PropertyKeyIdNotFoundKernelExcep
 import org.neo4j.internal.kernel.api.schema.SchemaDescriptor;
 import org.neo4j.io.fs.FileSystemAbstraction;
 import org.neo4j.io.fs.StoreChannel;
-import org.neo4j.kernel.api.schema.MultiTokenSchemaDescriptor;
 import org.neo4j.kernel.impl.core.TokenHolder;
 import org.neo4j.kernel.impl.core.TokenNotFoundException;
+import org.neo4j.kernel.impl.core.UnknownSortTypeException;
 import org.neo4j.storageengine.api.schema.StoreIndexDescriptor;
 
 public class FulltextIndexSettings
@@ -88,41 +88,66 @@ public class FulltextIndexSettings
         List<String> propertyNames = Collections.unmodifiableList( names );
 
         // Read in sortMap configuration
-        Map<String,String> sortMap = new HashMap<>();
-        if ( indexConfiguration.containsKey( INDEX_CONFIG_SORT_MAP ) )
-        {
-            try
-            {
-                sortMap = readSortMapProperty( indexConfiguration.getProperty( INDEX_CONFIG_SORT_MAP ) );
-            }
-            catch ( Exception e )
-            {
-                throw new IllegalStateException( "Unable to read 'sortMap' loading in FullIndexSettings", e );
-            }
-        }
+//        Map<String,String> sortMap = new HashMap<>();
+//        if ( indexConfiguration.containsKey( INDEX_CONFIG_SORT_MAP ) )
+//        {
+//            try
+//            {
+//                sortMap = readSortMapProperty( indexConfiguration.getProperty( INDEX_CONFIG_SORT_MAP ) );
+//            }
+//            catch ( Exception e )
+//            {
+//                throw new IllegalStateException( "Unable to read 'sortMap' loading in FullIndexSettings", e );
+//            }
+//        }
 
         List<String> sortNames = new ArrayList<>();
         Map<String,String> sortTypes = new HashMap<>();
-        for ( int propertyKeyId : descriptor.schema().getSortIds() )
+        for(int i = 0; i < descriptor.schema().getSortIds().length; i++ )
         {
+            int sortId = descriptor.schema().getSortIds()[i];
+            int sortType = descriptor.schema().getSortTypes()[i];
             try
             {
-                String name = propertyKeyTokenHolder.getTokenById( propertyKeyId ).name();
+                String name = propertyKeyTokenHolder.getTokenById( sortId ).name();
                 sortNames.add( name );
-                if ( isFulltextSD )
+
+                String sortTypeName = FulltextSortType.intToType( sortType );
+
+                if ( sortTypeName == null )
                 {
-                    sortTypes.put( name, ((FulltextSchemaDescriptor) descriptor.schema()).getSortType( name ) );
+                    throw new UnknownSortTypeException( name, sortId, sortType );
                 }
-                else if ( sortMap.containsKey( name ) )
-                {
-                    sortTypes.put( name, sortMap.get( name ) );
-                }
+
+                sortTypes.put( name, sortTypeName );
             }
             catch ( TokenNotFoundException e )
             {
-                throw new IllegalStateException( "Property key id not found.", new PropertyKeyIdNotFoundKernelException( propertyKeyId, e ) );
+                throw new IllegalStateException( "Property key id not found.", new PropertyKeyIdNotFoundKernelException( sortId, e ) );
             }
+
         }
+
+//        for ( int propertyKeyId : descriptor.schema().getSortIds() )
+//        {
+//            try
+//            {
+//                String name = propertyKeyTokenHolder.getTokenById( propertyKeyId ).name();
+//                sortNames.add( name );
+//                if ( isFulltextSD )
+//                {
+//                    sortTypes.put( name, ((FulltextSchemaDescriptor) descriptor.schema()).getSortType( name ) );
+//                }
+//                else if ( sortMap.containsKey( name ) )
+//                {
+//                    sortTypes.put( name, sortMap.get( name ) );
+//                }
+//            }
+//            catch ( TokenNotFoundException e )
+//            {
+//                throw new IllegalStateException( "Property key id not found.", new PropertyKeyIdNotFoundKernelException( propertyKeyId, e ) );
+//            }
+//        }
         List<String> sortPropertyNames = Collections.unmodifiableList( sortNames );
 
         return new FulltextIndexDescriptor( descriptor, propertyNames, analyzer, analyzerName, eventuallyConsistent, sortPropertyNames, sortTypes );

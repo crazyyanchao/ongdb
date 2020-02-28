@@ -36,19 +36,22 @@ public class LabelSchemaDescriptor implements org.neo4j.internal.kernel.api.sche
     private final int labelId;
     private final int[] propertyIds;
     private final int[] sortIds;
+    private final int[] sortTypes;
 
     LabelSchemaDescriptor( int labelId, int... propertyIds )
     {
         this.labelId = labelId;
         this.propertyIds = propertyIds;
         this.sortIds = new int[0];
+        this.sortTypes = new int[0];
     }
 
-    LabelSchemaDescriptor( int labelId, int[] propertyIds, int[] sortIds )
+    LabelSchemaDescriptor( int labelId, int[] propertyIds, int[] sortIds, int[] sortTypes )
     {
         this.labelId = labelId;
         this.propertyIds = propertyIds;
         this.sortIds = sortIds;
+        this.sortTypes = sortTypes;
     }
 
     @Override
@@ -157,5 +160,11 @@ public class LabelSchemaDescriptor implements org.neo4j.internal.kernel.api.sche
     public int[] getSortIds()
     {
         return sortIds;
+    }
+
+    @Override
+    public int[] getSortTypes()
+    {
+        return sortTypes;
     }
 }

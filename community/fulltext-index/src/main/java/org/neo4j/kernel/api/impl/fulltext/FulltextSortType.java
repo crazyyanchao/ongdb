@@ -20,9 +20,16 @@ package org.neo4j.kernel.api.impl.fulltext;
 
 public enum FulltextSortType
 {
-    LONG,
-    DOUBLE,
-    STRING;
+    LONG(0),
+    DOUBLE(1),
+    STRING(2);
+
+    int neoStoreByte;
+
+    private FulltextSortType(final Integer neoStoreByte)
+    {
+        this.neoStoreByte = neoStoreByte;
+    }
 
     public static FulltextSortType valueOfIgnoreCase( String name )
     {
@@ -34,5 +41,20 @@ public enum FulltextSortType
             }
         }
         return null;
+    }
+
+    public static String intToType( int i )
+    {
+        switch ( i )
+        {
+        case 0:
+            return LONG.name();
+        case 1:
+            return DOUBLE.name();
+        case 2:
+            return STRING.name();
+        default:
+            return null;
+        }
     }
 }

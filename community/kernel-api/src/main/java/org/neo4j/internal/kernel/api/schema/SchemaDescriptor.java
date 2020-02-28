@@ -83,6 +83,12 @@ public interface SchemaDescriptor extends SchemaDescriptorSupplier
         }
 
         @Override
+        public int[] getSortTypes()
+        {
+            return new int[0];
+        }
+
+        @Override
         public int[] getEntityTokenIds()
         {
             return new int[0];
@@ -211,6 +217,8 @@ public interface SchemaDescriptor extends SchemaDescriptorSupplier
     }
 
     int[] getSortIds();
+
+    int[] getSortTypes();
 
     /**
      * This method returns the entity token ids handled by this descriptor.
