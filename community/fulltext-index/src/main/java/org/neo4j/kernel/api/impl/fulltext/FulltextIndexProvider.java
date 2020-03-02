@@ -450,8 +450,15 @@ class FulltextIndexProvider extends IndexProvider implements FulltextAdapter, Au
         int i = 0;
         for ( String sortProperty : sortProperties )
         {
-            sortTypesArray[i] = FulltextSortType.valueOfIgnoreCase( sortMap.get( sortProperty ) ).neoStoreByte;
-            i++;
+            if ( sortMap.containsKey( sortProperty ) )
+            {
+                sortTypesArray[i] = FulltextSortType.valueOfIgnoreCase( sortMap.get( sortProperty ) ).neoStoreByte;
+                i++;
+            }
+            else
+            {
+                throw new RuntimeException( "Unable to find sortProperty '" + sortProperty + "' inside of the defined sortMap." );
+            }
         }
         return sortTypesArray;
     }
